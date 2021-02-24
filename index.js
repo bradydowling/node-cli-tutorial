@@ -31,7 +31,7 @@ const runCli = async () => {
   console.log("Getting headlines...");
   const headlines = await getEspnHeadlines();
   headlines.forEach((headline, i) => {
-    console.log(`${i}) [${headline.sport}] ${headline.text} --> ${headline.href}`);
+    console.log(`${i + 1}) [${headline.sport}] ${headline.text} --> ${headline.href}`);
   });
   const sport = await prompt.run();
   console.log(`Getting headlines for ${sport}...jk`);
