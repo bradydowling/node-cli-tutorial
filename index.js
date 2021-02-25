@@ -8,7 +8,7 @@ const getSportsList = (document) => {
       href: sport.href
     };
   }).filter(sport => {
-    // Some filter hacks because the initial query for sports isn't great
+    // Some filter hacks because our query for this isn't great
     const isEspnSite = sport.href?.split(".com/")[0] === "https://www.espn";
     const hasSingleRoute = sport.href?.split(".com/")[1]?.replace(/\/$/, "").split("/").length === 1;
     return isEspnSite && hasSingleRoute;
@@ -18,30 +18,46 @@ const getSportsList = (document) => {
   return sports;
 };
 
-const getHomepageHeadlines = () => {
-  const headlineItems = [...document.querySelectorAll('.col-three .headlineStack li a')];
-  return headlineItems.map(item => {
-    const postDotComText = item.href.split(".com/")[1];
-    return {
-      sport: postDotComText.split("/")[0],
-      text: item.innerText,
-      href: item.href,
-    };
-  });
-}
-
 const getInitialEspnData = async () => {
   const browser = await webkit.launch();
   const page = await browser.newPage();
   await page.goto('http://espn.com/');
   const { headlines, sports } = await page.evaluate(() => {
-    const headlines = getHomepageHeadlines(document);
-    const sports = getSportsList(document);
+    const headlineItems = [...document.querySelectorAll('.col-three .headlineStack li a')];
+    const headlines = headlineItems.map(item => {
+      const postDotComText = item.href.split(".com/")[1];
+      return {
+        sport: postDotComText.split("/")[0],
+        text: item.innerText,
+        href: item.href,
+      };
+    });
+    const sports = [...document.querySelectorAll('#global-nav ul.espn-en li.sports a')].map(sport => {
+      return {
+        name: sport.innerText.trim().split("\n")[0],
+        href: sport.href
+      };
+    }).filter(sport => {
+      // Some filter hacks because our query for this isn't great
+      const isEspnSite = sport.href?.split(".com/")[0] === "https://www.espn";
+      const hasSingleRoute = sport.href?.split(".com/")[1]?.replace(/\/$/, "").split("/").length === 1;
+      return isEspnSite && hasSingleRoute;
+    }).filter((outterItem, index, originalArray) => {
+      return originalArray.findIndex(innerItem => innerItem.href === outterItem.href) === index;
+    }).sort((a, b) => a.name.localeCompare(b.name));
     return { headlines, sports }
   });
   await browser.close();
   return { headlines, sports };
 };
+
+// const rightPad = (string, length) => {
+//   const newString = string.slice();
+//   while (newString.length < length) {
+//     newString.push(" ");
+//   }
+//   return newString;
+// }
 
 const rightPad = (string, length) => {
   if(length <= string.length) return string;
@@ -49,7 +65,7 @@ const rightPad = (string, length) => {
 };
 
 const logHeadlines = (headlines) => {
-  const maxHeadlineLength = Math.max(headlines.map(item => item.text.length));
+  const maxHeadlineLength = Math.max(...headlines.map(item => item.text.length + item.sport.length));
   // console.table(headlines);
   headlines.forEach((headline, i) => {
     console.log(`${i + 1}) [${headline.sport}] ${rightPad(headline.text, maxHeadlineLength)} --> ${headline.href}`);
