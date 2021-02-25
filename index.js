@@ -44,12 +44,9 @@ const getInitialEspnData = async () => {
 };
 
 const rightPad = (string, length) => {
-  const newString = string.slice();
-  while (newString.length < length) {
-    newString.push(" ");
-  }
-  return newString;
-}
+  if(length <= string.length) return string;
+  return string + new Array(length - string.length + 1).join(" ");
+};
 
 const logHeadlines = (headlines) => {
   const maxHeadlineLength = Math.max(headlines.map(item => item.text.length));
