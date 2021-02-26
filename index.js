@@ -89,6 +89,7 @@ const runCli = async () => {
   const selectedOption = options.find(option => option.title === selection);
   if (selectedOption.type === "headline") {
     console.log("This is where I'd show you the whole article");
+    // document.querySelectorAll(".article-body p") --> innerText
   }
   else if (selectedOption.type === "sport") {
     console.log(`This is where I'd show you headlines for ${selectedOption.title}`);
