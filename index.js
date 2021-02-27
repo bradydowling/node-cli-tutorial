@@ -1,9 +1,8 @@
 import enquirer from 'enquirer';
 import axios from "axios";
 import cheerio from "cheerio";
-import * as path from "path";
 
-const homepageUrl = "http://espn.com/";
+const homepageUrl = "https://espn.com/";
 const headlineSelector = ".col-three .headlineStack li a";
 const sportsSelector = "#global-nav ul li a";
 
@@ -31,23 +30,23 @@ const fetchEspnData = async () => {
 
   const headlines = [];
   $(headlineSelector).each(function (i, elem) {
-    const postDotComText = $(this).attr('href').replace(/^\//, "");
-    const href = path.join(homepageUrl, postDotComText);
+    const postDotComText = $(this).attr('href');
+    const url = new URL(postDotComText, homepageUrl);
     headlines[i] = {
       title: $(this).text(),
       sport: postDotComText.split("/")[0],
-      href,
+      href: url.href,
       type: "headline",
     }
   });
 
   const sports = [];
   $(sportsSelector).each(function (i, elem) {
-    const postDotComText = $(this).attr('href').replace(/^\//, "");
-    const href = path.join(homepageUrl, postDotComText);
+    const postDotComText = $(this).attr('href');
+    const url = new URL(postDotComText, homepageUrl);
     sports[i] = {
       title: $(this).text().trim().split("\n")[0].toLowerCase(),
-      href,
+      href: url.href,
       type: "sport",
     }
   });
@@ -58,6 +57,21 @@ const fetchEspnData = async () => {
 const rightPad = (string, length) => {
   if(length <= string.length) return string;
   return string + new Array(length - string.length + 1).join(" ");
+};
+
+const getArticleText = async (badUrl) => {
+  console.log(badUrl);
+  const articleUrl = badUrl.replace("http:/espn", "https://espn");
+  const response = await axios.get(articleUrl);
+  const html = response.data;
+  const $ = cheerio.load(html);
+
+  const paragraphSelector = ".article-body p";
+  const paragraphs = [];
+  $(paragraphSelector).each(function (i, elem) {
+    paragraphs[i] = $(this).text();
+  });
+  return paragraphs.join("\n\n");
 };
 
 const runCli = async () => {
@@ -74,8 +88,8 @@ const runCli = async () => {
   const selection = await prompt.run();
   const selectedOption = options.find(option => option.title === selection);
   if (selectedOption.type === "headline") {
-    console.log("This is where I'd show you the whole article");
-    // document.querySelectorAll(".article-body p") --> innerText
+    const article = await getArticleText(selectedOption.href);
+    console.log(article);
   }
   else if (selectedOption.type === "sport") {
     console.log(`This is where I'd show you headlines for ${selectedOption.title}`);
