@@ -6,7 +6,7 @@ import * as path from "path";
 
 const homepageUrl = "http://espn.com/";
 const headlineSelector = ".col-three .headlineStack li a";
-const sportsSelector = "#global-nav ul.espn-en li.sports a";
+const sportsSelector = "#global-nav ul li a";
 
 const getSportsList = (document) => {
   const sports = [...document.querySelectorAll('#global-nav ul.espn-en li.sports a')].map(sport => {
