@@ -1,4 +1,3 @@
-import { webkit } from 'playwright';
 import enquirer from 'enquirer';
 import axios from "axios";
 import cheerio from "cheerio";
@@ -55,43 +54,6 @@ const fetchEspnData = async () => {
 
   return { headlines, sports };
 }
-
-const getInitialEspnData = async () => {
-  const browser = await webkit.launch();
-  const page = await browser.newPage();
-  await page.goto(homepageUrl);
-  const { headlines, sports } = await page.evaluate(() => {
-    const headlineSelector = ".col-three .headlineStack li a";
-    const headlineItems = [...document.querySelectorAll(headlineSelector)];
-    const headlines = headlineItems.map(item => {
-      const postDotComText = item.href.split(".com/")[1];
-      return {
-        sport: postDotComText.split("/")[0],
-        title: item.innerText,
-        href: item.href,
-        type: "headline",
-      };
-    });
-    const sportsSelector = "#global-nav ul.espn-en li.sports a";
-    const sports = [...document.querySelectorAll(sportsSelector)].map(sport => {
-      return {
-        title: sport.innerText.trim().split("\n")[0],
-        href: sport.href,
-        type: "sport",
-      };
-    }).filter(sport => {
-      // Some filter hacks because our query for this isn't great
-      const isEspnSite = sport.href?.split(".com/")[0] === "https://www.espn";
-      const hasSingleRoute = sport.href?.split(".com/")[1]?.replace(/\/$/, "").split("/").length === 1;
-      return isEspnSite && hasSingleRoute;
-    }).filter((outterItem, index, originalArray) => {
-      return originalArray.findIndex(innerItem => innerItem.href === outterItem.href) === index;
-    }).sort((a, b) => a.title.localeCompare(b.title));
-    return { headlines, sports }
-  });
-  await browser.close();
-  return { headlines, sports };
-};
 
 const rightPad = (string, length) => {
   if(length <= string.length) return string;
