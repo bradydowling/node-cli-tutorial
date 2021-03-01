@@ -23,8 +23,9 @@ const getSportsList = (document) => {
   return sports;
 };
 
-const fetchEspnData = async () => {
-  const response = await axios.get(homepageUrl);
+const getHeadlines = async (pageUrl) => {
+  const returnObject = {};
+  const response = await axios.get(pageUrl);
   const html = response.data;
   const $ = cheerio.load(html);
 
@@ -39,19 +40,23 @@ const fetchEspnData = async () => {
       type: "headline",
     }
   });
+  returnObject.headlines = headlines;
 
-  const sports = [];
-  $(sportsSelector).each(function (i, elem) {
-    const postDotComText = $(this).attr('href');
-    const url = new URL(postDotComText, homepageUrl);
-    sports[i] = {
-      title: $(this).text().trim().split("\n")[0].toLowerCase(),
-      href: url.href,
-      type: "sport",
-    }
-  });
+  if (pageUrl === homepageUrl) {
+    const sports = [];
+    $(sportsSelector).each(function (i, elem) {
+      const postDotComText = $(this).attr('href');
+      const url = new URL(postDotComText, homepageUrl);
+      sports[i] = {
+        title: $(this).text().trim().split("\n")[0].toLowerCase(),
+        href: url.href,
+        type: "sport",
+      }
+    });
+    returnObject.sports = sports;
+  }
 
-  return { headlines, sports };
+  return returnObject;
 }
 
 const rightPad = (string, length) => {
@@ -59,9 +64,7 @@ const rightPad = (string, length) => {
   return string + new Array(length - string.length + 1).join(" ");
 };
 
-const getArticleText = async (badUrl) => {
-  console.log(badUrl);
-  const articleUrl = badUrl.replace("http:/espn", "https://espn");
+const getArticleText = async (articleUrl) => {
   const response = await axios.get(articleUrl);
   const html = response.data;
   const $ = cheerio.load(html);
@@ -77,7 +80,7 @@ const getArticleText = async (badUrl) => {
 const runCli = async () => {
   console.log("Thanks for consuming sports headlines responsibly!");
   console.log("Getting headlines...");
-  const { headlines, sports } = await fetchEspnData();
+  const { headlines, sports } = await getHeadlines(homepageUrl);
   const options = [...headlines, ...sports];
   const choices = options.map(option => option.title);
   const prompt = new enquirer.Select({
@@ -94,9 +97,7 @@ const runCli = async () => {
   else if (selectedOption.type === "sport") {
     console.log(`This is where I'd show you headlines for ${selectedOption.title}`);
   }
-  else {
-    console.log("Thanks for using the ESPN cli!");
-  }
+  console.log("Thanks for using the ESPN cli!");
 }
 
 runCli();
