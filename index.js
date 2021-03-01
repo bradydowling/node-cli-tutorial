@@ -96,6 +96,17 @@ const runCli = async () => {
   }
   else if (selectedOption.type === "sport") {
     console.log(`This is where I'd show you headlines for ${selectedOption.title}`);
+    const { headlines: sportHeadlines } = await getHeadlines(selectedOption.href);
+    const sportChoices = sportHeadlines.map(option => option.title);
+    const sportPrompt = new enquirer.Select({
+      name: 'color',
+      message: `Select a ${selectedOption.title} headline to get article text`,
+      choices: sportChoices
+    });
+    const sportHeadlineSelection = await sportPrompt.run();
+    const selectedSportOption = sportHeadlines.find(option => option.title === sportHeadlineSelection);
+    const sportArticle = await getArticleText(selectedSportOption.href);
+    console.log(sportArticle);
   }
   console.log("Thanks for using the ESPN cli!");
 }
