@@ -24,6 +24,7 @@ const getSportsList = (document) => {
 };
 
 const getHeadlines = async (pageUrl) => {
+  // TODO: Don't show insider articles
   const returnObject = {};
   const response = await axios.get(pageUrl);
   const html = response.data;
@@ -81,6 +82,7 @@ const getArticleText = async (articleUrl) => {
 const runCli = async () => {
   console.log("Thanks for consuming sports headlines responsibly!");
   console.log("Getting headlines...");
+  // TODO: Show prompts in a loop
   const { headlines, sports } = await getHeadlines(homepageUrl);
   const options = [...headlines, ...sports];
   const choices = options.map(option => option.title);
