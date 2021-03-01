@@ -70,11 +70,12 @@ const getArticleText = async (articleUrl) => {
   const $ = cheerio.load(html);
 
   const paragraphSelector = ".article-body p";
-  const paragraphs = [];
+  const paragraphs = [articleUrl];
   $(paragraphSelector).each(function (i, elem) {
     paragraphs[i] = $(this).text();
   });
-  return paragraphs.join("\n\n");
+  const articleContent = paragraphs.join("\n\n");
+  return `${articleUrl}\n\n${articleContent}`;;
 };
 
 const runCli = async () => {
