@@ -1,6 +1,7 @@
 import enquirer from 'enquirer';
 import axios from "axios";
 import cheerio from "cheerio";
+import boxen from "boxen";
 
 const homepageUrl = "https://espn.com/";
 const headlineSelector = ".col-three .headlineStack li a";
@@ -75,8 +76,7 @@ const getArticleText = async (articleUrl) => {
   $(paragraphSelector).each(function (i, elem) {
     paragraphs[i] = $(this).text();
   });
-  const articleContent = paragraphs.join("\n\n");
-  return `${articleUrl}\n\n${articleContent}`;;
+  return paragraphs.join("\n\n");
 };
 
 const runCli = async () => {
@@ -95,7 +95,8 @@ const runCli = async () => {
   const selectedOption = options.find(option => option.title === selection);
   if (selectedOption.type === "headline") {
     const article = await getArticleText(selectedOption.href);
-    console.log(article);
+    console.log(boxen(selectedOption.href, { borderStyle: 'bold'}));
+    console.log(boxen(article, { borderStyle: 'singleDouble'}));
   }
   else if (selectedOption.type === "sport") {
     console.log(`This is where I'd show you headlines for ${selectedOption.title}`);
@@ -109,7 +110,8 @@ const runCli = async () => {
     const sportHeadlineSelection = await sportPrompt.run();
     const selectedSportOption = sportHeadlines.find(option => option.title === sportHeadlineSelection);
     const sportArticle = await getArticleText(selectedSportOption.href);
-    console.log(sportArticle);
+    console.log(boxen(selectedSportOption.href, { borderStyle: 'bold'}));
+    console.log(boxen(sportArticle, { borderStyle: 'singleDouble'}));
   }
   console.log("Thanks for using the ESPN cli!");
 }
