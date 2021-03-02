@@ -74,7 +74,6 @@ const runCli = async () => {
     something = await currentPrompt.run();
   }
   */
- // TODO: Show progress bar while headlines are retrieved
   const { headlines, sports } = await getHeadlines(homepageUrl);
 	spinner.succeed("Here are the current headlines:");
   const options = [...headlines, ...sports];
