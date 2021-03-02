@@ -2,6 +2,7 @@ import enquirer from 'enquirer';
 import axios from "axios";
 import cheerio from "cheerio";
 import boxen from "boxen";
+import ora from "ora";
 
 const homepageUrl = "https://espn.com/";
 const headlineSelector = ".col-three .headlineStack li a";
@@ -59,7 +60,7 @@ const getArticleText = async (articleUrl) => {
 
 const runCli = async () => {
   console.log("Thanks for consuming sports headlines responsibly!");
-  console.log("Getting headlines...");
+  const spinner = ora("Getting headlines...").start();
   // TODO: Show prompts in a loop
   /*
   let articleText;
@@ -76,6 +77,7 @@ const runCli = async () => {
   */
  // TODO: Show progress bar while headlines are retrieved
   const { headlines, sports } = await getHeadlines(homepageUrl);
+	spinner.succeed("Here are the current headlines:");
   const options = [...headlines, ...sports];
   const choices = options.map(option => option.title);
   const prompt = new enquirer.Select({
