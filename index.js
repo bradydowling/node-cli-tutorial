@@ -9,7 +9,6 @@ const headlineSelector = ".col-three .headlineStack li a";
 const sportsSelector = "#global-nav ul li a";
 
 const getHeadlines = async (pageUrl) => {
-  // TODO: Don't show insider articles
   const returnObject = {};
   const response = await axios.get(pageUrl);
   const html = response.data;
@@ -26,7 +25,7 @@ const getHeadlines = async (pageUrl) => {
       type: "headline",
     }
   });
-  returnObject.headlines = headlines;
+  returnObject.headlines = headlines.filter(headline => !headline.href.includes("/insider/"));
 
   if (pageUrl === homepageUrl) {
     const sports = [];
