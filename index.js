@@ -8,40 +8,40 @@ const homepageUrl = "https://espn.com/";
 const headlineSelector = ".col-three .headlineStack li a";
 const sportsSelector = "#global-nav ul li a";
 
-const getHeadlines = async (pageUrl) => {
-  const returnObject = {};
+const getPageContents = async (pageUrl) => {
   const response = await axios.get(pageUrl);
   const html = response.data;
-  const $ = cheerio.load(html);
+  const $cheerioLoader = cheerio.load(html);
+  return $cheerioLoader;
+}
 
+const getHeadlines = ($page) => {
   const headlines = [];
-  $(headlineSelector).each(function (i, elem) {
-    const postDotComText = $(this).attr('href');
+  $page(headlineSelector).each(function (i, elem) {
+    const postDotComText = $page(this).attr('href');
     const url = new URL(postDotComText, homepageUrl);
     headlines[i] = {
-      title: $(this).text(),
+      title: $page(this).text(),
       sport: postDotComText.split("/")[0],
       href: url.href,
       type: "headline",
     }
   });
-  returnObject.headlines = headlines.filter(headline => !headline.href.includes("/insider/"));
+  return headlines.filter(headline => !headline.href.includes("/insider/"));
+};
 
-  if (pageUrl === homepageUrl) {
-    const sports = [];
-    $(sportsSelector).each(function (i, elem) {
-      const postDotComText = $(this).attr('href');
-      const url = new URL(postDotComText, homepageUrl);
-      sports[i] = {
-        title: $(this).text().trim().split("\n")[0].toLowerCase(),
-        href: url.href,
-        type: "sport",
-      }
-    });
-    returnObject.sports = sports;
-  }
-
-  return returnObject;
+const getSports = ($page) => {
+  const sports = [];
+  $page(sportsSelector).each(function (i, elem) {
+    const postDotComText = $page(this).attr('href');
+    const url = new URL(postDotComText, homepageUrl);
+    sports[i] = {
+      title: $page(this).text().trim().split("\n")[0].toLowerCase(),
+      href: url.href,
+      type: "sport",
+    }
+  });
+  return sports;
 }
 
 const getArticleText = async (articleUrl) => {
@@ -74,7 +74,9 @@ const runCli = async () => {
     something = await currentPrompt.run();
   }
   */
-  const { headlines, sports } = await getHeadlines(homepageUrl);
+  const $page = await getPageContents(homepageUrl);
+  const headlines = getHeadlines($page);
+  const sports = getSports($page);
 	spinner.succeed("Here are the current headlines:");
   const options = [...headlines, ...sports];
   const choices = options.map(option => option.title);
