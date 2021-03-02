@@ -61,6 +61,20 @@ const runCli = async () => {
   console.log("Thanks for consuming sports headlines responsibly!");
   console.log("Getting headlines...");
   // TODO: Show prompts in a loop
+  /*
+  let articleText;
+  let currentPrompt;
+  while(!exit) {
+    if (articleText) {
+      articleText = await getArticleText(selectedOption.href);
+      console.log(boxen(selectedOption.href, { borderStyle: 'bold'}));
+      console.log(boxen(article, { borderStyle: 'singleDouble'}));
+      articleText = "";
+    }
+    something = await currentPrompt.run();
+  }
+  */
+ // TODO: Show progress bar while headlines are retrieved
   const { headlines, sports } = await getHeadlines(homepageUrl);
   const options = [...headlines, ...sports];
   const choices = options.map(option => option.title);
