@@ -7,23 +7,6 @@ const homepageUrl = "https://espn.com/";
 const headlineSelector = ".col-three .headlineStack li a";
 const sportsSelector = "#global-nav ul li a";
 
-const getSportsList = (document) => {
-  const sports = [...document.querySelectorAll('#global-nav ul.espn-en li.sports a')].map(sport => {
-    return {
-      name: sport.innerText.trim().split("\n")[0],
-      href: sport.href
-    };
-  }).filter(sport => {
-    // Some filter hacks because our query for this isn't great
-    const isEspnSite = sport.href?.split(".com/")[0] === "https://www.espn";
-    const hasSingleRoute = sport.href?.split(".com/")[1]?.replace(/\/$/, "").split("/").length === 1;
-    return isEspnSite && hasSingleRoute;
-  }).filter((outterItem, index, originalArray) => {
-    return originalArray.findIndex(innerItem => innerItem.href === outterItem.href) === index;
-  }).sort((a, b) => a.title.localeCompare(b.title));
-  return sports;
-};
-
 const getHeadlines = async (pageUrl) => {
   // TODO: Don't show insider articles
   const returnObject = {};
@@ -60,11 +43,6 @@ const getHeadlines = async (pageUrl) => {
 
   return returnObject;
 }
-
-const rightPad = (string, length) => {
-  if(length <= string.length) return string;
-  return string + new Array(length - string.length + 1).join(" ");
-};
 
 const getArticleText = async (articleUrl) => {
   const response = await axios.get(articleUrl);
