@@ -68,14 +68,16 @@ const runCli = async () => {
   const homepageHeadlines = getHeadlines($homepage);
   const sports = getSports($homepage);
 
-  const genericOptions = {
-    HOMEPAGE_HEADLINES: { title: "see homepage headlines" },
-    LIST_SPORTS: { title: "see headlines for specific sports" },
-    EXIT: { title: "exit" },
-  };
   const selectionTypes = {
     HEADLINE: "headline",
-    SPORT: "sport"
+    SPORT: "sport",
+    MORE: "more"
+  };
+
+  const genericOptions = {
+    HOMEPAGE_HEADLINES: { title: "see homepage headlines" },
+    LIST_SPORTS: { title: "see headlines for specific sports", type: selectionTypes.MORE },
+    EXIT: { title: "exit" },
   };
 
   let selection;
@@ -102,7 +104,7 @@ const runCli = async () => {
       currentPrompt = new enquirer.Select({
         name: 'color',
         message: `Select a ${selection.title} headline to get article text`,
-        choices: sportChoices
+        choices: [...sportChoices, ...Object.values(genericOptions).map(choice => choice.title)]
       });
     }
     else if (selection.type === selectionTypes.HEADLINE) {
@@ -116,6 +118,13 @@ const runCli = async () => {
       });
       articleText = "";
     }
+    else if (selection.type === selectionTypes.MORE) {
+      currentPrompt = new enquirer.Select({
+        name: 'color',
+        message: 'Which sport would you like headlines for?',
+        choices: sports.map(choice => choice.title)
+      });
+    }
 
     selectionTitle = await currentPrompt.run();
     selection = Object.values(genericOptions).find(item => item.title === selectionTitle) || homepageHeadlines.find(item => item.title === selectionTitle) || sports.find(item => item.title === selectionTitle);
@@ -125,18 +134,8 @@ const runCli = async () => {
 
   // const options = [...homepageHeadlines, ...sports];
   // const choices = options.map(option => option.title);
-  // const prompt = new enquirer.Select({
-  //   name: 'color',
-  //   message: 'Select a headline to get article text or a sport to see headlines for that sport',
-  //   choices
-  // });
   // const selection = await prompt.run();
   // const selectedOption = options.find(option => option.title === selection);
-  // if (selectedOption.type === "headline") {
-  //   const article = await getArticleText(selectedOption.href);
-  //   console.log(boxen(selectedOption.href, { borderStyle: 'bold'}));
-  //   console.log(boxen(article, { borderStyle: 'singleDouble'}));
-  // }
   // else if (selectedOption.type === "sport") {
   //   console.log(`This is where I'd show you headlines for ${selectedOption.title}`);
   //   const $sportPage = await getPageContents(selectedOption.href);
