@@ -57,6 +57,9 @@ const getArticleText = async (articleUrl) => {
   return paragraphs.join("\n\n");
 };
 
+// TODO: add option for more sports
+// TODO: add initial option to quit
+
 const runCli = async () => {
   console.log("Thanks for consuming sports headlines responsibly!");
   const spinner = ora("Getting headlines...").start();
