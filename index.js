@@ -97,7 +97,8 @@ const runCli = async () => {
   }
   else if (selectedOption.type === "sport") {
     console.log(`This is where I'd show you headlines for ${selectedOption.title}`);
-    const { headlines: sportHeadlines } = await getHeadlines(selectedOption.href);
+    const $sportPage = await getPageContents(selectedOption.href);
+    const sportHeadlines = getHeadlines($sportPage);
     const sportChoices = sportHeadlines.map(option => option.title);
     const sportPrompt = new enquirer.Select({
       name: 'color',
