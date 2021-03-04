@@ -46,8 +46,7 @@ const getSports = ($page) => {
     const hasSingleRoute = pathname.replace(/^\//, "").replace(/\/$/, "").split("/").length === 1;
     const isEspn = new URL(sport.href).hostname === "espn.com";
     return isEspn && hasSingleRoute && pathname.length > 1;
-  })
-  return sports;
+  });
 }
 
 const getArticleText = async (articleUrl) => {
