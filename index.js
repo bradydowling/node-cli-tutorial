@@ -18,7 +18,7 @@ const getPageContents = async (pageUrl) => {
 const getHeadlines = ($page) => {
   const headlines = [];
   $page(headlineSelector).each(function (i, elem) {
-    const postDotComText = $page(this).attr('href');
+    const postDotComText = $page(this).attr('href').replace(/^\//, "");
     const url = new URL(postDotComText, homepageUrl);
     headlines[i] = {
       title: $page(this).text(),
@@ -62,8 +62,6 @@ const getArticleText = async (articleUrl) => {
   return paragraphs.join("\n\n");
 };
 
-// TODO: add option for more sports
-
 const runCli = async () => {
   console.log("Thanks for consuming sports headlines responsibly!");
   const spinner = ora("Getting headlines...").start();
@@ -71,18 +69,16 @@ const runCli = async () => {
   spinner.succeed("ESPN headlines received");
   const homepageHeadlines = getHeadlines($homepage);
   const sports = getSports($homepage);
-  const sportsHeadlines = [];
-  for (let i in sports) {
-    getPageContents(sports[i].href).then(($sportPage) => {
+  const headlinesBySport = {};
+  // TODO: move spinner.suceed here and use Promise.all
+  for (let sport of sports) {
+    getPageContents(sport.href).then(($sportPage) => {
       const headlines = getHeadlines($sportPage);
-      sportsHeadlines.push(headlines);
+      headlinesBySport[sport.title] = headlines;
     }).catch((e) => {
       console.log("there was an issue getting headlines for a certain sport", e);
     });
   }
-  setTimeout(() => {
-    console.log(sportsHeadlines);
-  }, 9000);
 
   const selectionTypes = {
     HEADLINE: "headline",
@@ -116,8 +112,7 @@ const runCli = async () => {
       });
     }
     else if (selection.type === selectionTypes.SPORT) {
-      const $sportPage = await getPageContents(selection.href);
-      const sportHeadlines = getHeadlines($sportPage);
+      const sportHeadlines = headlinesBySport[selection.title];
       const sportChoices = sportHeadlines.map(option => option.title);
       currentPrompt = new enquirer.Select({
         name: 'color',
@@ -132,7 +127,7 @@ const runCli = async () => {
       currentPrompt = new enquirer.Select({
         name: 'color',
         message: 'Done reading? What next?',
-        choices: Object.values(genericOptions).map(choice => choice.title)
+        choices: [genericOptions.HOMEPAGE_HEADLINES.title, genericOptions.LIST_SPORTS.title, genericOptions.EXIT.title]
       });
       articleText = "";
     }
@@ -145,7 +140,11 @@ const runCli = async () => {
     }
 
     selectionTitle = await currentPrompt.run();
-    selection = Object.values(genericOptions).find(item => item.title === selectionTitle) || homepageHeadlines.find(item => item.title === selectionTitle) || sports.find(item => item.title === selectionTitle);
+    const combinedSportHeadlines = Object.values(headlinesBySport).reduce((accumulator, item) => {
+      return [...accumulator, ...item];
+    }, [])
+    const allOptions = [...Object.values(genericOptions), ...homepageHeadlines, ...sports, ...combinedSportHeadlines];
+    selection = allOptions.find(item => item.title === selectionTitle);
   }
   console.log("Thanks for using the ESPN cli!");
   return;
