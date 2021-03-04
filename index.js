@@ -41,6 +41,12 @@ const getSports = ($page) => {
       type: "sport",
     }
   });
+  return sports.filter(sport => {
+    const pathname = new URL(sport.href).pathname;
+    const hasSingleRoute = pathname.replace(/^\//, "").replace(/\/$/, "").split("/").length === 1;
+    const isEspn = new URL(sport.href).hostname === "espn.com";
+    return isEspn && hasSingleRoute && pathname.length > 1;
+  })
   return sports;
 }
 
@@ -67,6 +73,7 @@ const runCli = async () => {
   spinner.succeed("ESPN headlines received");
   const homepageHeadlines = getHeadlines($homepage);
   const sports = getSports($homepage);
+  const sportsHeadlines = [];
 
   const selectionTypes = {
     HEADLINE: "headline",
@@ -77,6 +84,7 @@ const runCli = async () => {
   const genericOptions = {
     HOMEPAGE_HEADLINES: { title: "see homepage headlines" },
     LIST_SPORTS: { title: "see headlines for specific sports", type: selectionTypes.MORE },
+    OTHER_SPORTS: { title: "see headlines for other sports", type: selectionTypes.MORE },
     EXIT: { title: "exit" },
   };
 
@@ -86,6 +94,7 @@ const runCli = async () => {
   let currentPrompt;
   let exit = false;
   while(!exit) {
+    currentPrompt?.clear();
     if (selection?.title === genericOptions.EXIT.title) {
       exit = true;
       break;
@@ -93,8 +102,8 @@ const runCli = async () => {
     if (!selection || selection.title === genericOptions.HOMEPAGE_HEADLINES.title) {
       currentPrompt = new enquirer.Select({
         name: 'color',
-        message: 'Select a headline to get article text or a sport to see headlines for that sport',
-        choices: [...homepageHeadlines.map(item => item.title), ...Object.values(genericOptions).map(choice => choice.title)]
+        message: 'What story shall we read?',
+        choices: [...homepageHeadlines.map(item => item.title), genericOptions.LIST_SPORTS.title, genericOptions.EXIT.title]
       });
     }
     else if (selection.type === selectionTypes.SPORT) {
@@ -104,7 +113,7 @@ const runCli = async () => {
       currentPrompt = new enquirer.Select({
         name: 'color',
         message: `Select a ${selection.title} headline to get article text`,
-        choices: [...sportChoices, ...Object.values(genericOptions).map(choice => choice.title)]
+        choices: [...sportChoices, genericOptions.HOMEPAGE_HEADLINES.title, genericOptions.OTHER_SPORTS.title, genericOptions.EXIT.title]
       });
     }
     else if (selection.type === selectionTypes.HEADLINE) {
