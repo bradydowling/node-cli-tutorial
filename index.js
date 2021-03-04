@@ -63,6 +63,8 @@ const getArticleText = async (articleUrl) => {
 };
 
 const runCli = async () => {
+  // TODO: Add coloring/styling somewhere https://github.com/chalk/chalk
+  // TODO: Use node-localstorage to check how many times the CLI has been run https://github.com/lmaccherone/node-localstorage
   console.log("Thanks for consuming sports headlines responsibly!");
   const spinner = ora("Getting headlines...").start();
   const $homepage = await getPageContents(homepageUrl);
@@ -122,6 +124,7 @@ const runCli = async () => {
     }
     else if (selection.type === selectionTypes.HEADLINE) {
       articleText = await getArticleText(selection.href);
+      // TODO: Use log-update to clear this out https://github.com/sindresorhus/log-update
       console.log(boxen(selection.href, { borderStyle: 'bold'}));
       console.log(boxen(articleText, { borderStyle: 'singleDouble'}));
       currentPrompt = new enquirer.Select({
