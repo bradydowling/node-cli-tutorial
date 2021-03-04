@@ -63,7 +63,6 @@ const getArticleText = async (articleUrl) => {
 };
 
 // TODO: add option for more sports
-// TODO: add initial option to quit
 
 const runCli = async () => {
   console.log("Thanks for consuming sports headlines responsibly!");
@@ -139,27 +138,6 @@ const runCli = async () => {
   }
   console.log("Thanks for using the ESPN cli!");
   return;
-
-  // const options = [...homepageHeadlines, ...sports];
-  // const choices = options.map(option => option.title);
-  // const selection = await prompt.run();
-  // const selectedOption = options.find(option => option.title === selection);
-  // else if (selectedOption.type === "sport") {
-  //   console.log(`This is where I'd show you headlines for ${selectedOption.title}`);
-  //   const $sportPage = await getPageContents(selectedOption.href);
-  //   const sportHeadlines = getHeadlines($sportPage);
-  //   const sportChoices = sportHeadlines.map(option => option.title);
-  //   const sportPrompt = new enquirer.Select({
-  //     name: 'color',
-  //     message: `Select a ${selectedOption.title} headline to get article text`,
-  //     choices: sportChoices
-  //   });
-  //   const sportHeadlineSelection = await sportPrompt.run();
-  //   const selectedSportOption = sportHeadlines.find(option => option.title === sportHeadlineSelection);
-  //   const sportArticle = await getArticleText(selectedSportOption.href);
-  //   console.log(boxen(selectedSportOption.href, { borderStyle: 'bold'}));
-  //   console.log(boxen(sportArticle, { borderStyle: 'singleDouble'}));
-  // }
 }
 
 runCli();
