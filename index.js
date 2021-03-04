@@ -67,11 +67,22 @@ const getArticleText = async (articleUrl) => {
 const runCli = async () => {
   console.log("Thanks for consuming sports headlines responsibly!");
   const spinner = ora("Getting headlines...").start();
-  const $homepage = await getPageContents(homepageUrl); // TODO: asynchronously get all headlines, sports, sport headlines (and articles?)
+  const $homepage = await getPageContents(homepageUrl);
   spinner.succeed("ESPN headlines received");
   const homepageHeadlines = getHeadlines($homepage);
   const sports = getSports($homepage);
   const sportsHeadlines = [];
+  for (let i in sports) {
+    getPageContents(sports[i].href).then(($sportPage) => {
+      const headlines = getHeadlines($sportPage);
+      sportsHeadlines.push(headlines);
+    }).catch((e) => {
+      console.log("there was an issue getting headlines for a certain sport", e);
+    });
+  }
+  setTimeout(() => {
+    console.log(sportsHeadlines);
+  }, 9000);
 
   const selectionTypes = {
     HEADLINE: "headline",
