@@ -18,7 +18,7 @@ const getPageContents = async (pageUrl) => {
 const getHeadlines = ($page) => {
   const headlines = [];
   $page(headlineSelector).each(function (i, elem) {
-    const postDotComText = $page(this).attr('href').replace(/^\//, "");
+    const postDotComText = $page(this).attr('href');
     const url = new URL(postDotComText, homepageUrl);
     headlines[i] = {
       title: $page(this).text(),
