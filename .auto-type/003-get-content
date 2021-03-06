@@ -1,0 +1,4 @@
+file: index.js
+line: 3
+summary: Now that we have the basic structure for our CLI laid out, let's get some initial content that we can display to the user.
+---
