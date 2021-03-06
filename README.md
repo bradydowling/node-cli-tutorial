@@ -1,1 +1,1 @@
-A CLI utility for getting NBA stats
+Creating a Node CLI to get sports headlines
