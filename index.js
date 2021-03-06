@@ -71,7 +71,7 @@ const showTodaysUsage = () => {
   const dateString = now.toLocaleString('en-US', dateOptions);
   const todaysRuns = parseInt(localStorage.getItem(dateString)) || 0;
   const chalkColor = todaysRuns < 5 ? "green" : todaysRuns > 10 ? "red" : "yellow";
-  console.log(chalk[chalkColor](`You've now checked ESPN ${todaysRuns} times today`));
+  console.log(chalk[chalkColor](`Times you've checked ESPN today: ${todaysRuns}`));
   localStorage.setItem(dateString, todaysRuns + 1);
 }
 
