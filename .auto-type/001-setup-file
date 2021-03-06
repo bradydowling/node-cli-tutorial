@@ -1,0 +1,11 @@
+file: index2.js
+---
+import enquirer from 'enquirer';
+
+const runCli = async () => {
+  console.log("Thanks for consuming sports headlines responsibly!");
+  console.log("Thanks for using the ESPN cli!");
+  return;
+}
+
+runCli();
