@@ -1,4 +1,4 @@
-file: index2.js
+file: index.js
 ---
 import enquirer from 'enquirer';
 

@@ -1,0 +1,14 @@
+file: index.js
+line: 3
+---
+⇥
+  // Welcome user↓⇥
+  // Get initial data
+
+  // Initialize prompt variables
+
+  // Loop through CLI selections
+  while(!exit) {
+    // Handle selection
+    // Get next selection
+  }
