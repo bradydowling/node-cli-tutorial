@@ -3,6 +3,9 @@ import axios from "axios";
 import cheerio from "cheerio";
 import boxen from "boxen";
 import ora from "ora";
+import chalk from "chalk";
+import { LocalStorage } from "node-localstorage";
+const localStorage = new LocalStorage('./scratch');
 
 const homepageUrl = "https://espn.com/";
 const headlineSelector = ".col-three .headlineStack li a";
@@ -62,9 +65,18 @@ const getArticleText = async (articleUrl) => {
   return paragraphs.join("\n\n");
 };
 
+const showTodaysUsage = () => {
+  const dateOptions = { year: 'numeric', month: 'numeric', day: 'numeric' };
+  const now = new Date();
+  const dateString = now.toLocaleString('en-US', dateOptions);
+  const todaysRuns = parseInt(localStorage.getItem(dateString)) || 0;
+  const chalkColor = todaysRuns < 5 ? "green" : todaysRuns > 10 ? "red" : "yellow";
+  console.log(chalk[chalkColor](`You've now checked ESPN ${todaysRuns} times today`));
+  localStorage.setItem(dateString, todaysRuns + 1);
+}
+
 const runCli = async () => {
-  // TODO: Add coloring/styling somewhere https://github.com/chalk/chalk
-  // TODO: Use node-localstorage to check how many times the CLI has been run https://github.com/lmaccherone/node-localstorage
+  showTodaysUsage();
   console.log("Thanks for consuming sports headlines responsibly!");
   const spinner = ora("Getting headlines...").start();
   const $homepage = await getPageContents(homepageUrl);
@@ -72,7 +84,6 @@ const runCli = async () => {
   const homepageHeadlines = getHeadlines($homepage);
   const sports = getSports($homepage);
   const headlinesBySport = {};
-  // TODO: move spinner.suceed here and use Promise.all
   for (let sport of sports) {
     getPageContents(sport.href).then(($sportPage) => {
       const headlines = getHeadlines($sportPage);
@@ -124,7 +135,6 @@ const runCli = async () => {
     }
     else if (selection.type === selectionTypes.HEADLINE) {
       articleText = await getArticleText(selection.href);
-      // TODO: Use log-update to clear this out https://github.com/sindresorhus/log-update
       console.log(boxen(selection.href, { borderStyle: 'bold'}));
       console.log(boxen(articleText, { borderStyle: 'singleDouble'}));
       currentPrompt = new enquirer.Select({
