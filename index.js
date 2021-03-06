@@ -124,6 +124,13 @@ const runCli = async () => {
         choices: [...homepageHeadlines.map(item => item.title), genericOptions.LIST_SPORTS.title, genericOptions.EXIT.title]
       });
     }
+    else if (selection.type === selectionTypes.MORE) {
+      currentPrompt = new enquirer.Select({
+        name: 'color',
+        message: 'Which sport would you like headlines for?',
+        choices: sports.map(choice => choice.title)
+      });
+    }
     else if (selection.type === selectionTypes.SPORT) {
       const sportHeadlines = headlinesBySport[selection.title];
       const sportChoices = sportHeadlines.map(option => option.title);
@@ -143,13 +150,6 @@ const runCli = async () => {
         choices: [genericOptions.HOMEPAGE_HEADLINES.title, genericOptions.LIST_SPORTS.title, genericOptions.EXIT.title]
       });
       articleText = "";
-    }
-    else if (selection.type === selectionTypes.MORE) {
-      currentPrompt = new enquirer.Select({
-        name: 'color',
-        message: 'Which sport would you like headlines for?',
-        choices: sports.map(choice => choice.title)
-      });
     }
 
     selectionTitle = await currentPrompt.run();
