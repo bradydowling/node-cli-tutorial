@@ -12,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@rwxdev/espn": "^0.0.1",
+    "@rwxdev/espn": "^0.0.2",
     "axios": "^0.21.1",
     "boxen": "^5.0.0",
     "chalk": "^4.1.0",
