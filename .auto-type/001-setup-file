@@ -1,12 +1,13 @@
 file: index.js
 summary: First we're going to setup our file. We'll import `enquirer` since we're definitely going to be using that later on and then we'll setup a main function where we can run eventually some async code and the rest of our CLI.
 ---
-import enquirer from 'enquirer';
+import enquirer from ''←enquirer→;
 
-const runCli = async () => {
-  console.log("Thanks for consuming sports headlines responsibly!");
-  console.log("Thanks for using the ESPN cli!");
-  return;
-}
+const runCli = async () => {}←
+
+↑  console.log()←""←Thanks for consuming sports headlines responsibly!→→;
+  console.log()←""←Thanks for using the ESPN cli!→→;
+
+  return;↓↓
 
 runCli();

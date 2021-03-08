@@ -1,4 +1,15 @@
 file: index.js
-line: 3
-summary: Now that we have the basic structure for our CLI laid out, let's get some initial content that we can display to the user.
+line: 1
+summary: Now that we have the basic structure for our CLI laid out, let's get some initial content that we can display to the user. We'll import and use the helper functions that are already defined for getting the data we want to show. We'll also import and use our first CLI library here, called ora. Ora allows us to create a loader widget in the terminal. We'll start the loader once we begin getting our data then we can call success once the data is fetched.
 ---
+⇥
+import ora from "ora";
+import {
+  getArticleText,
+  getHeadlines,
+  getPageContents,
+  getSports
+} from "./helpers.js";↓↓↓↓⇥
+  const spinner = ora("Getting headlines...").start();
+  const $homepage = await getPageContents(homepageUrl);
+  spinner.succeed("ESPN headlines received");

@@ -1,15 +1,22 @@
 file: index.js
 line: 3
-summary: Now lets drop some comments into our code so we can orient ourselves with each step we take and we know where to add certain bits of code. Because this is a CLI, we'll be prompting the user over and over for information until they choose to exit. This is a good fit for a while loop in which we can specify which selection the user made.
+summary: Now lets drop some comments into our code so we can orient ourselves with each step we take and we know where to add certain bits of code. Because this is a CLI, we'll be prompting the user over and over for information until they choose to exit. This is a good fit for a while loop in which we can specify which selection the user made. For now, we'll declare a selection variable but not initialize it so the CLI will default to exiting if no other selection has been made.
 ---
 ⇥
   // Welcome user↓⇥
   // Get initial data
 
   // Initialize prompt variables
+  let selection;
+  let exit = false;
 
   // Loop through CLI selections
-  while(!exit) {
-    // Handle selection
+  while(!exit) {}←
+  
+  ↑  // Handle selection
+    if (selection?.title === genericOptions.EXIT.title) {}←
+    
+    ↑  exit = true;
+      break;↓⇥
+
     // Get next selection
-  }
