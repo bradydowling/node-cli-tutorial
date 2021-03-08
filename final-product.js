@@ -8,7 +8,7 @@ import {
   getHeadlines,
   getPageContents,
   getSports
-} from "./helpers.js";
+} from "@rwxdev/espn";
 
 const localStorage = new LocalStorage('./scratch');
 const homepageUrl = "https://espn.com/";
