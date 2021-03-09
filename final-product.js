@@ -1,16 +1,16 @@
+import ora from "ora";
 import enquirer from 'enquirer';
 import boxen from "boxen";
-import ora from "ora";
-import chalk from "chalk";
 import { LocalStorage } from "node-localstorage";
+const localStorage = new LocalStorage('./scratch');
+import chalk from "chalk";
 import {
   getArticleText,
   getHeadlines,
   getPageContents,
-  getSports
+  getSports,
 } from "@rwxdev/espn";
 
-const localStorage = new LocalStorage('./scratch');
 const homepageUrl = "https://espn.com/";
 
 const showTodaysUsage = () => {
@@ -28,6 +28,7 @@ const runCli = async () => {
   console.log("Thanks for consuming sports headlines responsibly!");
   const spinner = ora("Getting headlines...").start();
   const $homepage = await getPageContents(homepageUrl);
+
   spinner.succeed("ESPN headlines received");
   const homepageHeadlines = getHeadlines($homepage);
   const sports = getSports($homepage);
@@ -46,7 +47,6 @@ const runCli = async () => {
     SPORT: "sport",
     MORE: "more"
   };
-
   const genericOptions = {
     HOMEPAGE_HEADLINES: { title: "see homepage headlines" },
     LIST_SPORTS: { title: "see headlines for specific sports", type: selectionTypes.MORE },
@@ -61,20 +61,16 @@ const runCli = async () => {
   let exit = false;
   while(!exit) {
     currentPrompt?.clear();
-    if (selection?.title === genericOptions.EXIT.title) {
-      exit = true;
-      break;
-    }
     if (!selection || selection.title === genericOptions.HOMEPAGE_HEADLINES.title) {
       currentPrompt = new enquirer.Select({
-        name: 'color',
+        name: 'homepage',
         message: 'What story shall we read?',
         choices: [...homepageHeadlines.map(item => item.title), genericOptions.LIST_SPORTS.title, genericOptions.EXIT.title]
       });
     }
     else if (selection.type === selectionTypes.MORE) {
       currentPrompt = new enquirer.Select({
-        name: 'color',
+        name: 'sports',
         message: 'Which sport would you like headlines for?',
         choices: sports.map(choice => choice.title)
       });
@@ -83,7 +79,7 @@ const runCli = async () => {
       const sportHeadlines = headlinesBySport[selection.title];
       const sportChoices = sportHeadlines.map(option => option.title);
       currentPrompt = new enquirer.Select({
-        name: 'color',
+        name: 'sportHeadlines',
         message: `Select a ${selection.title} headline to get article text`,
         choices: [...sportChoices, genericOptions.HOMEPAGE_HEADLINES.title, genericOptions.OTHER_SPORTS.title, genericOptions.EXIT.title]
       });
@@ -93,11 +89,15 @@ const runCli = async () => {
       console.log(boxen(selection.href, { borderStyle: 'bold'}));
       console.log(boxen(articleText, { borderStyle: 'singleDouble'}));
       currentPrompt = new enquirer.Select({
-        name: 'color',
+        name: 'article',
         message: 'Done reading? What next?',
         choices: [genericOptions.HOMEPAGE_HEADLINES.title, genericOptions.LIST_SPORTS.title, genericOptions.EXIT.title]
       });
       articleText = "";
+    }
+    else {
+      exit = true;
+      break;
     }
 
     selectionTitle = await currentPrompt.run();
