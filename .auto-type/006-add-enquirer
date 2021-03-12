@@ -1,0 +1,5 @@
+file: index.js
+line: 1
+---
+⇥
+import enquirer from 'enquirer';
