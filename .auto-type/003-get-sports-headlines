@@ -1,0 +1,14 @@
+file: index.js
+line: 15
+---
+⇥
+  const sports = getSports($homepage);
+  const headlinesBySport = {};
+  for (let sport of sports) {
+    getPageContents(sport.href).then(($sportPage) => {
+      const headlines = getHeadlines($sportPage);
+      headlinesBySport[sport.title] = headlines;
+    }).catch((e) => {
+      console.log("there was an issue getting headlines for a certain sport", e);
+    });
+  }
