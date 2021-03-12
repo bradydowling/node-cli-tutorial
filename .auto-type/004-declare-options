@@ -1,0 +1,15 @@
+file: index.js
+line: 26
+---
+
+  const selectionTypes = {
+    HEADLINE: "headline",
+    SPORT: "sport",
+    MORE: "more"
+  };
+  const genericOptions = {
+    HOMEPAGE_HEADLINES: { title: "see homepage headlines" },
+    LIST_SPORTS: { title: "see headlines for specific sports", type: selectionTypes.MORE },
+    OTHER_SPORTS: { title: "see headlines for other sports", type: selectionTypes.MORE },
+    EXIT: { title: "exit" },
+  };
