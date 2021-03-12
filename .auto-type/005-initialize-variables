@@ -1,0 +1,12 @@
+file: index.js
+line: 38
+---
+
+  let selection;
+  let selectionTitle;
+  let articleText;
+  let currentPrompt;
+  let exit = false;
+  while(!exit) {
+    // Where we'll handle the user's selection
+  }
