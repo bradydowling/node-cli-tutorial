@@ -1,0 +1,16 @@
+file: index.js
+---
+
+
+↑↑import ora from "ora";
+import {
+  getArticleText,
+  getHeadlines,
+  getPageContents,
+  getSports,
+} from "@rwxdev/espn";
+
+const homepageUrl = "https://espn.com/";
+↓↓↓↓  const spinner = ora("Getting headlines...").start();
+  const $homepage = await getPageContents(homepageUrl);
+  spinner.succeed("ESPN headlines received");

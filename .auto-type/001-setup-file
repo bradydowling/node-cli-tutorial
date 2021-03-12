@@ -1,7 +1,6 @@
 file: index.js
 ---
 const runCli = async () => {
-  // Welcome user
   console.log("Thanks for consuming sports headlines responsibly!");
 
   console.log("Thanks for using the ESPN cli!");
