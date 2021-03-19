@@ -1,0 +1,9 @@
+file: index.js
+line: 53
+---
+⇥
+    const combinedSportHeadlines = Object.values(headlinesBySport).reduce((accumulator, item) => {
+      return [...accumulator, ...item];
+    }, [])
+    const allOptions = [...Object.values(genericOptions), ...homepageHeadlines, ...sports, ...combinedSportHeadlines];
+    selection = allOptions.find(item => item.title === selectionTitle);

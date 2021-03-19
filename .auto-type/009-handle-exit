@@ -1,0 +1,8 @@
+file: index.js
+line: 52
+---
+⇥
+    else {
+      exit = true;
+      break;
+    }

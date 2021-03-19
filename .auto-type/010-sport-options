@@ -1,0 +1,11 @@
+file: index.js
+line: 52
+---
+⇥
+    else if (selection.type === selectionTypes.MORE) {
+      currentPrompt = new enquirer.Select({
+        name: "sports",
+        message: "Which sport would you like headlines for?",
+        choices: sports.map(choice => choice.title)
+      });
+    }
