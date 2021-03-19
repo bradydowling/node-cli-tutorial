@@ -44,6 +44,7 @@ const runCli = async () => {
   let currentPrompt;
   let exit = false;
   while(!exit) {
+    currentPrompt?.clear();
     if (!selection || selection.title === genericOptions.HOMEPAGE_HEADLINES.title) {
       currentPrompt = new enquirer.Select({
         name: "homepage",
