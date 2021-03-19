@@ -1,6 +1,9 @@
 import ora from "ora";
 import enquirer from 'enquirer';
 import boxen from "boxen";
+import { LocalStorage } from "node-localstorage";
+const localStorage = new LocalStorage("./scratch"); // scratch is the name of the directory where local storage is saved, this can be change to whatever you'd like
+import chalk from "chalk";
 import {
   getArticleText,
   getHeadlines,
