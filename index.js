@@ -1,5 +1,6 @@
 import ora from "ora";
 import enquirer from 'enquirer';
+import boxen from "boxen";
 import {
   getArticleText,
   getHeadlines,

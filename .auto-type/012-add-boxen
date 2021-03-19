@@ -1,0 +1,5 @@
+file: index.js
+line: 2
+---
+⇥
+import boxen from "boxen";
