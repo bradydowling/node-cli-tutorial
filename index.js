@@ -67,6 +67,17 @@ const runCli = async () => {
         choices: [...sportChoices, genericOptions.HOMEPAGE_HEADLINES.title, genericOptions.OTHER_SPORTS.title, genericOptions.EXIT.title]
       });
     }
+    else if (selection.type === selectionTypes.HEADLINE) {
+      articleText = await getArticleText(selection.href);
+      console.log(boxen(selection.href, { borderStyle: 'bold'}));
+      console.log(boxen(articleText, { borderStyle: 'singleDouble'}));
+      currentPrompt = new enquirer.Select({
+        name: "article",
+        message: "Done reading? What next?",
+        choices: [genericOptions.HOMEPAGE_HEADLINES.title, genericOptions.LIST_SPORTS.title, genericOptions.EXIT.title]
+      });
+      articleText = "";
+    }
     else {
       exit = true;
       break;
