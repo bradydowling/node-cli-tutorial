@@ -57,6 +57,15 @@ const runCli = async () => {
         choices: sports.map(choice => choice.title)
       });
     }
+    else if (selection.type === selectionTypes.SPORT) {
+      const sportHeadlines = headlinesBySport[selection.title];
+      const sportChoices = sportHeadlines.map(option => option.title);
+      currentPrompt = new enquirer.Select({
+        name: "sportHeadlines",
+        message: `Select a ${selection.title} headline to get article text`,
+        choices: [...sportChoices, genericOptions.HOMEPAGE_HEADLINES.title, genericOptions.OTHER_SPORTS.title, genericOptions.EXIT.title]
+      });
+    }
     else {
       exit = true;
       break;
