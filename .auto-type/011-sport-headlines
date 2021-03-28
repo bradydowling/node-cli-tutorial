@@ -1,5 +1,5 @@
 file: index.js
-line: 59
+line: 60
 ---
 ⇥
     else if (selection.type === selectionTypes.SPORT) {

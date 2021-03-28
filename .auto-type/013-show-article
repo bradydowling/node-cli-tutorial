@@ -1,5 +1,5 @@
 file: index.js
-line: 69
+line: 70
 ---
 ⇥
     else if (selection.type === selectionTypes.HEADLINE) {

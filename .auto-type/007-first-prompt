@@ -1,5 +1,5 @@
 file: index.js
-line: 46
+line: 47
 ---
 ⇥⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫if (!selection || selection.title === genericOptions.HOMEPAGE_HEADLINES.title) {
       currentPrompt = new enquirer.Select({

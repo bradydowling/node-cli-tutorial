@@ -1,5 +1,5 @@
 file: index.js
-line: 53
+line: 54
 ---
 ⇥
     const combinedSportHeadlines = Object.values(headlinesBySport).reduce((accumulator, item) => {

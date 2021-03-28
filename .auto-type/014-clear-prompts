@@ -1,5 +1,5 @@
 file: index.js
-line: 46
+line: 47
 ---
 ⇥
     currentPrompt?.clear();

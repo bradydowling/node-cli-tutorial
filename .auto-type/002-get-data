@@ -13,3 +13,4 @@ import {
 ↓↓↓  const spinner = ora("Getting headlines...").start();
   const $homepage = await getPageContents(homepageUrl);
   spinner.succeed("ESPN headlines received");
+  const homepageHeadlines = getHeadlines($homepage);

@@ -1,5 +1,5 @@
 file: index.js
-line: 52
+line: 53
 ---
 ⇥
     else if (selection.type === selectionTypes.MORE) {
