@@ -1,7 +1,7 @@
 file: index.js
 line: 47
 ---
-⇥⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫⌫if (!selection || selection.title === genericOptions.HOMEPAGE_HEADLINES.title) {
+⇥↚    if (!selection || selection.title === genericOptions.HOMEPAGE_HEADLINES.title) {
       currentPrompt = new enquirer.Select({
         name: "homepage",
         message: "What story shall we read?",
